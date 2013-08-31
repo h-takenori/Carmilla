@@ -1,5 +1,6 @@
 package jp.ancouapp.carmilla;
 
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.Reader;
@@ -24,6 +25,10 @@ public class Carmilla {
 		initRuby();
 	}
 
+	//===================================================================================================
+	// 初期化
+	//===================================================================================================
+	
 	// Ruby初期化
 	static private void initRuby() {
 		RubyInstanceConfig config = new RubyInstanceConfig();
@@ -74,6 +79,10 @@ public class Carmilla {
 	private Carmilla() {
 	}
 
+	//===================================================================================================
+	// 完結系メソッド
+	//===================================================================================================
+	
 	/**
 	 * block条件により、リストから抽出を行う
 	 * @param list 検索元
@@ -119,7 +128,7 @@ public class Carmilla {
 	 * @param block　変換処理
 	 * @return 変換されたリスト
 	 */
-	public static <E1,E2> List<E2> collect(List<E1> list, Class<E2> resultClass, String block ) {
+	public static <E1,E2> List<E2> collectE(List<E1> list, Class<E2> resultClass, String block ) {
 		IRubyObject[] rubyArgs = new IRubyObject[]{
 				JavaUtil.convertJavaToRuby(_ruby, list),
 				JavaUtil.convertJavaToRuby(_ruby, resultClass.getName()),
@@ -145,6 +154,50 @@ public class Carmilla {
 		IRubyObject resutl = _carmillaRb.callMethod(_ruby.getCurrentContext() , "group_by" ,rubyArgs);
 		return (Map<K, List<V>>)resutl.convertToHash();
 	}
+	
+	//===================================================================================================
+	// チェーン系メソッド
+	//===================================================================================================
 
+	/**
+	 * block条件により、リストから抽出を行う
+	 * 実施後、チェーン可能。
+	 * @param list 検索元
+	 * @param block 抽出条件
+	 * @param args 引数、抽出条件の?を置換する
+	 * @return CarmillaChain
+	 */
+	public static <E> CarmillaChain<E> select(List<E> list, String block,
+			Object... args) {
+		List<E> list2 = selectE(list , block , args);
+		CarmillaChain<E> chain = new CarmillaChain<E>(list2);
+		return chain;
+	}
 
+	/**
+	 * リストをソートする。Rubyのsortを使用する
+	 * 実施後、チェーン可能。
+	 * @param list
+	 * @param block ソート条件
+	 * @return CarmillaChain
+	 */
+	public static <E> CarmillaChain<E> sort(List<E> list, String block) {
+		List<E> list2 = sortE(list , block);
+		CarmillaChain<E> chain = new CarmillaChain<E>(list2);
+		return chain;
+	}
+
+	/**
+	 * リストに対してRubyのCollect処理を実施する。
+	 * 実施後、チェーン可能。
+	 * @param list 
+	 * @param resultClass 変換結果のクラス情報
+	 * @param block　変換処理
+	 * @return CarmillaChain
+	 */
+	public static <E1,E2> CarmillaChain<E2> collect(List<E1> list, Class<E2> resultClass, String block ) {
+		List<E2> list2 = collectE(list , resultClass , block);
+		CarmillaChain<E2> chain = new CarmillaChain<E2>(list2);
+		return chain;
+	}
 }
