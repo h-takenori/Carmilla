@@ -113,39 +113,39 @@ public class CarmillaTest
         assertEquals( result.get( 0 ).getSize(), 100 );
         assertEquals( result.get( 1 ).getSize(), 50 );
         assertEquals( result.get( 2 ).getSize(), 10 );
-        
+
         result =
             Carmilla
-                .sort(_list, "b.y <=> a.y" )
-                .select("a.width == 11" )
+                .sort( _list, "b.y <=> a.y" )
+                .select( "a.width == 11" )
                 .collect( Font.class, "Font.new( 'MS Gothic', a.x, a.x )" )
                 .getList();
         assertEquals( result.size(), 3 );
         assertEquals( result.get( 0 ).getSize(), 100 );
         assertEquals( result.get( 1 ).getSize(), 50 );
         assertEquals( result.get( 2 ).getSize(), 10 );
-        
+
         List<Point> resultP =
             Carmilla
-                .collect(_list , Point.class, "Point.new(a.width, a.height )" )
-                .sort("b.y <=> a.y" )
-                .select("a.x == 11" )
+                .collect( _list, Point.class, "Point.new(a.width, a.height )" )
+                .sort( "b.y <=> a.y" )
+                .select( "a.x == 11" )
                 .getList();
         assertEquals( resultP.size(), 3 );
         assertEquals( resultP.get( 0 ).y, 100 );
         assertEquals( resultP.get( 1 ).y, 50 );
         assertEquals( resultP.get( 2 ).y, 5 );
-        
+
         Map<Integer, List<Point>> mapP =
             Carmilla
-                .collect(_list , Point.class, "Point.new(a.width, a.height )" )
-                .sort("b.y <=> a.y" )
-                .select("a.x == 11" )
+                .collect( _list, Point.class, "Point.new(a.width, a.height )" )
+                .sort( "b.y <=> a.y" )
+                .select( "a.x == 11" )
                 .groupByE( "a.x" );
         assertEquals( mapP.size(), 1 );
-        assertEquals( mapP.get( 11 ).size() , 3);
-        assertEquals( mapP.get( 11 ).get(0).x , 11);
-        assertEquals( mapP.get( 11 ).get(1).x , 11);
-        assertEquals( mapP.get( 11 ).get(2).x , 11);
+        assertEquals( mapP.get( 11 ).size(), 3 );
+        assertEquals( mapP.get( 11 ).get( 0 ).x, 11 );
+        assertEquals( mapP.get( 11 ).get( 1 ).x, 11 );
+        assertEquals( mapP.get( 11 ).get( 2 ).x, 11 );
     }
 }
