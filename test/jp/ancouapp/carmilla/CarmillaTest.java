@@ -61,11 +61,15 @@ public class CarmillaTest {
 	@Test
 	public void testGroupByE() {	
 		//groupBy
-		Map<Integer , Rectangle> mapGroupeE = Carmilla.groupByE(_list , "a.width");
-		assertEquals(mapGroupeE.size(), 4);
-		assertEquals(mapGroupeE.get(0).y, 1);
-		assertEquals(mapGroupeE.get(1).y, 0);
-		assertEquals(mapGroupeE.get(2).y, 2);
-		assertEquals(mapGroupeE.get(3).y, 3);		
+		Map<Integer , List<Rectangle>> mapGroupeE = Carmilla.groupByE(_list , "a.width");
+		assertEquals(mapGroupeE.size(), 2);
+		assertEquals(mapGroupeE.get(10).size(), 1);
+		assertEquals(mapGroupeE.get(11).size(), 3);		
+		
+		//groupBy
+		Map<String , List<Rectangle>> map2 = Carmilla.groupByE(_list , "a.width.to_s");
+		assertEquals(map2.size(), 2);
+		assertEquals(map2.get("10").size(), 1);
+		assertEquals(map2.get("11").size(), 3);
 	}
 }

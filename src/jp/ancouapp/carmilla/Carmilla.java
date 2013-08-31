@@ -101,10 +101,15 @@ public class Carmilla {
 		return null;
 	}
 	
-	public static Map<Integer, Rectangle> groupByE(List<Rectangle> list,
-			String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public static <K,V> Map<K, List<V>> groupByE(List<V> list,
+			String block) {
+		IRubyObject[] rubyArgs = new IRubyObject[]{
+				JavaUtil.convertJavaToRuby(_ruby, list),
+				JavaUtil.convertJavaToRuby(_ruby, block)
+		};
+		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
+		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "group_by" ,rubyArgs);
+		return (Map<K, List<V>>)resutl.convertToHash();
 	}
 
 

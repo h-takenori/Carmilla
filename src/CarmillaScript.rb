@@ -12,4 +12,10 @@ class CarmillaScript
       eval block
     }
   end
+  
+  def group_by(list , block)
+    list.group_by{|a|
+      eval block
+    }
+  end
 end
