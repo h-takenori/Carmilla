@@ -12,7 +12,7 @@ class CarmillaScript
     }
   end
 
-  def collect(list , block , result_class)
+  def collect(list , result_class,block)
     import result_class
     list.collect{|a|
       eval block

@@ -1,12 +1,8 @@
 package jp.ancouapp.carmilla;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +11,6 @@ import jline.internal.InputStreamReader;
 import org.jruby.CompatVersion;
 import org.jruby.Ruby;
 import org.jruby.RubyInstanceConfig;
-import org.jruby.RubyRuntimeAdapter;
-import org.jruby.javasupport.JavaEmbedUtils;
 import org.jruby.javasupport.JavaUtil;
 import org.jruby.runtime.builtin.IRubyObject;
 import org.jruby.util.KCode;
@@ -38,6 +32,10 @@ public class Carmilla {
 		_ruby.evalScriptlet(readScript());
 	}
 
+	/**
+	 * 内部処理用Rubyスクリプトファイルを読む
+	 * @return
+	 */
 	private static String readScript() {
 		StringBuilder result = new StringBuilder();
 		try {
@@ -68,10 +66,19 @@ public class Carmilla {
 		return result.toString();
 	}
 
+	/**
+	 * コンストラクタ使用禁止
+	 */
 	private Carmilla() {
 	}
 
-	// Ruby:selectメソッド
+	/**
+	 * block条件により、リストから抽出を行う
+	 * @param list 検索元
+	 * @param block 抽出条件
+	 * @param args 引数、抽出条件の?を置換する
+	 * @return 抽出されたリスト
+	 */
 	public static <E> List<E> selectE(List<E> list, String block,
 			Object... args) {
 		for (Object arg : args) {
@@ -83,9 +90,16 @@ public class Carmilla {
 		};
 		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
 		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "select" ,rubyArgs);
+
 		return (List<E>)resutl.convertToArray();
 	}
 
+	/**
+	 * リストをソートする。Rubyのsortを使用する
+	 * @param list
+	 * @param block ソート条件
+	 * @return ソートされたリスト
+	 */
 	public static <E> List<E> sortE(List<E> list, String block) {
 		IRubyObject[] rubyArgs = new IRubyObject[]{
 				JavaUtil.convertJavaToRuby(_ruby, list),
@@ -96,17 +110,30 @@ public class Carmilla {
 		return (List<E>)resutl.convertToArray();
 	}
 
-	public static <E1,E2> List<E2> collect(List<E1> list, String block , Class<E2> resultClass) {
+	/**
+	 * リストに対してRubyのCollect処理を実施する。
+	 * @param list 
+	 * @param resultClass 変換結果のクラス情報
+	 * @param block　変換処理
+	 * @return 変換されたリスト
+	 */
+	public static <E1,E2> List<E2> collect(List<E1> list, Class<E2> resultClass, String block ) {
 		IRubyObject[] rubyArgs = new IRubyObject[]{
 				JavaUtil.convertJavaToRuby(_ruby, list),
-				JavaUtil.convertJavaToRuby(_ruby, block),
-				JavaUtil.convertJavaToRuby(_ruby, resultClass.getName())
+				JavaUtil.convertJavaToRuby(_ruby, resultClass.getName()),
+				JavaUtil.convertJavaToRuby(_ruby, block)
 		};
 		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
 		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "collect" ,rubyArgs);
 		return (List<E2>)resutl.convertToArray();
 	}
 	
+	/**
+	 * リストをblockの条件でGroupByする
+	 * @param list リスト
+	 * @param block Group条件
+	 * @return Group条件の型とGroupされた結果のリスト
+	 */
 	public static <K,V> Map<K, List<V>> groupByE(List<V> list,
 			String block) {
 		IRubyObject[] rubyArgs = new IRubyObject[]{
