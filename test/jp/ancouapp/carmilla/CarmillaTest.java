@@ -6,33 +6,66 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class CarmillaTest {
 
+	List<Rectangle> _list ;
+	
+	@Before
+	public void setUp() {
+		_list= new ArrayList<Rectangle>();
+		_list.add(new Rectangle(0, 0, 10, 10));
+		_list.add(new Rectangle(10, 1, 11, 5));
+		_list.add(new Rectangle(50, 2, 11, 100));
+		_list.add(new Rectangle(100, 3, 11, 50));
+	}
+	
 	@Test
-	public void test() {
-		List<Rectangle> list = new ArrayList<Rectangle>();
-		list.add(new Rectangle(0, 0, 11, 5));
-		list.add(new Rectangle(10, 1, 11, 10));
-		list.add(new Rectangle(50, 2, 11, 50));
-		list.add(new Rectangle(100, 3, 11, 100));
-		
+	public void testSelectE() {		
 		//select
-		Rectangle a;
+		//Rectangle a;
 		//a.getCenterX()
-		List<Rectangle> listSelectE = Carmilla.selectE(list , "x.x < ? && ? <= x.centerX" , 75 , 10.5);
+		List<Rectangle> listSelectE = Carmilla.selectE(_list , "a.x < ? && ? <= a.centerX" , 75 , 10.5);
 		assertEquals(listSelectE.size(), 2);
 		assertEquals(listSelectE.get(0).y, 1);
 		assertEquals(listSelectE.get(1).y, 2);
-
-		//sort
-		
-		//collect
-		
-		//groupBy
-		
 	}
 
+	@Test
+	public void testSortE() {	
+		//sort
+		List<Rectangle> listSortE = Carmilla.sortE(_list , "a.height <=> b.height");
+		assertEquals(listSortE.size(), 4);
+		assertEquals(listSortE.get(0).y, 1);
+		assertEquals(listSortE.get(1).y, 0);
+		assertEquals(listSortE.get(2).y, 3);
+		assertEquals(listSortE.get(3).y, 2);
+		
+
+	}
+
+	@Test
+	public void testCollectE() {	
+		//collect
+		List<Point> list2 = Carmilla.collect(_list , "Point.New(a.x , a.y)");
+		assertEquals(list2.size(), 4);
+		assertEquals(list2.get(0).y, 0);
+		assertEquals(list2.get(1).y, 1);
+		assertEquals(list2.get(2).y, 2);
+		assertEquals(list2.get(3).y, 3);	
+	}
+	@Test
+	public void testGroupByE() {	
+		//groupBy
+		Map<Integer , Rectangle> mapGroupeE = Carmilla.groupByE(_list , "a.width");
+		assertEquals(mapGroupeE.size(), 4);
+		assertEquals(mapGroupeE.get(0).y, 1);
+		assertEquals(mapGroupeE.get(1).y, 0);
+		assertEquals(mapGroupeE.get(2).y, 2);
+		assertEquals(mapGroupeE.get(3).y, 3);		
+	}
 }

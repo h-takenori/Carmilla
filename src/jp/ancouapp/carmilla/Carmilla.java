@@ -1,11 +1,14 @@
 package jp.ancouapp.carmilla;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import jline.internal.InputStreamReader;
 
@@ -78,9 +81,31 @@ public class Carmilla {
 				JavaUtil.convertJavaToRuby(_ruby, list),
 				JavaUtil.convertJavaToRuby(_ruby, block)
 		};
-		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaRb.new");
+		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
 		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "select" ,rubyArgs);
-		return (List<E>)resutl;
+		return (List<E>)resutl.convertToArray();
 	}
+
+	public static <E> List<E> sortE(List<E> list, String block) {
+		IRubyObject[] rubyArgs = new IRubyObject[]{
+				JavaUtil.convertJavaToRuby(_ruby, list),
+				JavaUtil.convertJavaToRuby(_ruby, block)
+		};
+		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
+		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "sort" ,rubyArgs);
+		return (List<E>)resutl.convertToArray();
+	}
+
+	public static List<Point> collect(List<Rectangle> _list, String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public static Map<Integer, Rectangle> groupByE(List<Rectangle> list,
+			String string) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }
