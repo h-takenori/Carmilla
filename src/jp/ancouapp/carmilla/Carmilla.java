@@ -19,6 +19,7 @@ public class Carmilla {
 
 	// rubyインスタンス
 	private static Ruby _ruby;
+	private static IRubyObject _carmillaRb ;
 	static {
 		initRuby();
 	}
@@ -30,6 +31,7 @@ public class Carmilla {
 		config.setCompatVersion(CompatVersion.RUBY1_9);
 		_ruby = Ruby.newInstance(config);
 		_ruby.evalScriptlet(readScript());
+		_carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
 	}
 
 	/**
@@ -88,8 +90,8 @@ public class Carmilla {
 				JavaUtil.convertJavaToRuby(_ruby, list),
 				JavaUtil.convertJavaToRuby(_ruby, block)
 		};
-		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
-		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "select" ,rubyArgs);
+		_carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
+		IRubyObject resutl = _carmillaRb.callMethod(_ruby.getCurrentContext() , "select" ,rubyArgs);
 
 		return (List<E>)resutl.convertToArray();
 	}
@@ -105,8 +107,8 @@ public class Carmilla {
 				JavaUtil.convertJavaToRuby(_ruby, list),
 				JavaUtil.convertJavaToRuby(_ruby, block)
 		};
-		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
-		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "sort" ,rubyArgs);
+		_carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
+		IRubyObject resutl = _carmillaRb.callMethod(_ruby.getCurrentContext() , "sort" ,rubyArgs);
 		return (List<E>)resutl.convertToArray();
 	}
 
@@ -123,8 +125,8 @@ public class Carmilla {
 				JavaUtil.convertJavaToRuby(_ruby, resultClass.getName()),
 				JavaUtil.convertJavaToRuby(_ruby, block)
 		};
-		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
-		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "collect" ,rubyArgs);
+		_carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
+		IRubyObject resutl = _carmillaRb.callMethod(_ruby.getCurrentContext() , "collect" ,rubyArgs);
 		return (List<E2>)resutl.convertToArray();
 	}
 	
@@ -140,8 +142,7 @@ public class Carmilla {
 				JavaUtil.convertJavaToRuby(_ruby, list),
 				JavaUtil.convertJavaToRuby(_ruby, block)
 		};
-		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
-		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "group_by" ,rubyArgs);
+		IRubyObject resutl = _carmillaRb.callMethod(_ruby.getCurrentContext() , "group_by" ,rubyArgs);
 		return (Map<K, List<V>>)resutl.convertToHash();
 	}
 

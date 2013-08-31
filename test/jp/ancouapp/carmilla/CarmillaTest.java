@@ -9,31 +9,37 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 
 public class CarmillaTest {
 
-	List<Rectangle> _list;
-
-	@Before
-	public void setUp() {
+	static List<Rectangle> _list;
+	
+	static {
 		_list = new ArrayList<Rectangle>();
 		_list.add(new Rectangle(0, 0, 10, 10));
 		_list.add(new Rectangle(10, 1, 11, 5));
 		_list.add(new Rectangle(50, 2, 11, 100));
 		_list.add(new Rectangle(100, 3, 11, 50));
 	}
+	@Rule
+	public ThreadRule r = new ThreadRule(100);
+	
+
+	@Before
+	public void setUp() {
+	}
 
 	@Test
 	public void testSelectE() {
-		// select
-		// Rectangle a;
-		// a.getCenterX()
+		System.out.println("begin testSelectE");
 		List<Rectangle> listSelectE = Carmilla.selectE(_list,
 				"a.x < ? && ? <= a.centerX", 75, 10.5);
 		assertEquals(listSelectE.size(), 2);
 		assertEquals(listSelectE.get(0).y, 1);
 		assertEquals(listSelectE.get(1).y, 2);
+		System.out.println("end testSelectE");
 	}
 
 	@Test
