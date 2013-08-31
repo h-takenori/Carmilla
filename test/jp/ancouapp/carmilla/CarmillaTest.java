@@ -51,7 +51,7 @@ public class CarmillaTest {
 	@Test
 	public void testCollectE() {	
 		//collect
-		List<Point> list2 = Carmilla.collect(_list , "Point.New(a.x , a.y)");
+		List<Point> list2 = Carmilla.collect(_list , "Point.new(a.x , a.y)", Point.class );
 		assertEquals(list2.size(), 4);
 		assertEquals(list2.get(0).y, 0);
 		assertEquals(list2.get(1).y, 1);

@@ -96,9 +96,15 @@ public class Carmilla {
 		return (List<E>)resutl.convertToArray();
 	}
 
-	public static List<Point> collect(List<Rectangle> _list, String string) {
-		// TODO Auto-generated method stub
-		return null;
+	public static <E1,E2> List<E2> collect(List<E1> list, String block , Class<E2> resultClass) {
+		IRubyObject[] rubyArgs = new IRubyObject[]{
+				JavaUtil.convertJavaToRuby(_ruby, list),
+				JavaUtil.convertJavaToRuby(_ruby, block),
+				JavaUtil.convertJavaToRuby(_ruby, resultClass.getName())
+		};
+		IRubyObject carmillaRb = _ruby.evalScriptlet("CarmillaScript.new");
+		IRubyObject resutl = carmillaRb.callMethod(_ruby.getCurrentContext() , "collect" ,rubyArgs);
+		return (List<E2>)resutl.convertToArray();
 	}
 	
 	public static <K,V> Map<K, List<V>> groupByE(List<V> list,
