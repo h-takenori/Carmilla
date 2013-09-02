@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="carmilla" default="jar" basedir="." >
+	<target name="jar">
+		<mkdir dir="build" />
+		<copy file="./src/CarmillaScript.rb" todir="./build"/>
+		<javac destdir="build" source="1.5" encoding="UTF-8"
+			classpath="lib/jruby-1.7.4.jar">
+			<src path="src" />
+			<include name="**/*.java" />
+			<include name="*.rb" />
+		</javac>
+		<jar basedir="build" jarfile="lib/carmilla.jar" />
+	</target>
+</project>
