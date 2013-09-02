@@ -1,7 +1,7 @@
 #Carmilla
 ========
 
-CarmillaはJavaでRubyのブロックなメソッドを使えるライブラリです。
+CarmillaはJavaでRubyのブロックなメソッドを使えるライブラリです。  
 条件をRuby構文のStringで書くことで、Rubyで苦手だったソートとか抽出が超簡単に出来ます。
 
 
@@ -14,21 +14,21 @@ List<Rectangle>list = createTestList();
         
         
 //collectしてsortしてselectする
-List<Point> list2 =
-    Carmilla
-        .collect( _list, Point.class, "Point.new(a.width, a.height )" )
-        .sort( "b.y <=> a.y" )
-        .select( "a.x == 11" )
-        .getList();
+List<Point> list2 =  
+    Carmilla  
+        .collect( _list, Point.class, "Point.new(a.width, a.height )" )  
+        .sort( "b.y <=> a.y" )  
+        .select( "a.x == 11" )  
+        .getList();  
         
         
-//collectしてsortしてselectしてgroupbyする
-Map<Integer, List<Point>> map3 =
-    Carmilla
-        .collect( _list, Point.class, "Point.new(a.width, a.height )" )
-        .sort( "b.y <=> a.y" )
-        .select( "a.x == 11" )
-        .groupByE( "a.x" );
+//collectしてsortしてselectしてgroupbyする  
+Map<Integer, List<Point>> map3 =  
+    Carmilla  
+        .collect( _list, Point.class, "Point.new(a.width, a.height )" )  
+        .sort( "b.y <=> a.y" )  
+        .select( "a.x == 11" )  
+        .groupByE( "a.x" );  
         
 
 #Licence
